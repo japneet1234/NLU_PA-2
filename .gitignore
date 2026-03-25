@@ -1,0 +1,32 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Model weights / large binaries
+*.pt
+*.pth
+
+# Corpus / dataset files
+*.txt
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.pdf
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# iitj_pdfs and report_assets directories
+iitj_pdfs/
+report_assets/
