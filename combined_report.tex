@@ -47,6 +47,13 @@
 \cfoot{\thepage}
 
 \setstretch{1.15}
+\setlist[itemize]{noitemsep, topsep=2pt}
+\setlist[enumerate]{noitemsep, topsep=2pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\captionsetup{font=small,skip=4pt}
+\renewcommand{\arraystretch}{1.08}
 
 \begin{document}
 
@@ -69,6 +76,10 @@
     
 
     \vfill
+
+    {\large
+    \textbf{Repository:} \href{https://github.com/japneet1234/NLU_PA-2?tab=readme-ov-file}{github.com/japneet1234/NLU\_PA-2}\\[4pt]
+    \textbf{Project Page:} \href{https://japneet1234.github.io/NLU_PA-2/}{japneet1234.github.io/NLU\_PA-2/}\par}
 
     % {\large \textbf{Submitted On:} \today\par}
 \end{titlepage}
@@ -125,7 +136,9 @@ The final cleaned corpus statistics :
 
 \begin{table}[H]
 \centering
-\caption{Problem 1 Corpus Statistics}
+\begin{minipage}[t]{0.48\textwidth}
+\centering
+\captionof{table}{Problem 1 Corpus Statistics}
 \begin{tabular}{l c}
 \toprule
 \textbf{Statistic} & \textbf{Value} \\
@@ -133,14 +146,13 @@ The final cleaned corpus statistics :
 Total Documents (Webpages + PDFs) & 71 \\
 Total Tokens & 640,046 \\
 Vocabulary Size & 34,446 \\
-% Word2Vec Vocabulary Size (after min-count and token filtering) & 10,069 \\
 \bottomrule
 \end{tabular}
-\end{table}
-
-\begin{table}[H]
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
 \centering
-\caption{Top-10 Most Frequent Tokens}
+\captionof{table}{Top-10 Most Frequent Tokens}
 \begin{tabular}{l c}
 \toprule
 \textbf{Token} & \textbf{Count} \\
@@ -157,6 +169,7 @@ system & 3903 \\
 science & 3604 \\
 \bottomrule
 \end{tabular}
+\end{minipage}
 \end{table}
 
 \begin{figure}[H]
@@ -173,6 +186,7 @@ Both models were implemented from scratch in NumPy using the SGNS formulation (S
 \begin{table}[H]
 \centering
 \caption{Word2Vec Training Configuration}
+\small
 \begin{tabular}{l c}
 \toprule
 \textbf{Hyperparameter} & \textbf{Value} \\
@@ -188,14 +202,21 @@ Random Seed & 42 \\
 \end{tabular}
 \end{table}
 
+Generated supervision sizes:
+\begin{itemize}[leftmargin=1.5em]
+    \item Skip-gram pairs: 5,828,080
+    \item CBOW pairs: 582,311
+\end{itemize}
 
 \subsubsection{Hyperparameter Experiments }
 
 To evaluate model sensitivity, controlled experiments were conducted by varying one hyperparameter at a time while keeping the others fixed. Specifically, three ablations were run: (A) embedding dimension, (B) context window size, and (C) number of negative samples. For each setting, both CBOW and Skip-gram were retrained on the same cleaned IITJ corpus, and performance was summarized using final training loss paired with qualitative assessment of semantic quality (e.g., analogy solving capability, coherence of neighborhoods, and neighbor relevance).
 
+
 \begin{table}[H]
 \centering
 \caption{Experiment A: Varying Embedding Dimension ($w=5, k=5$ fixed)}
+\small
 \begin{tabular}{c c c c}
 \toprule
 \textbf{Embedding Dim} & \textbf{CBOW Loss} & \textbf{SG Loss} & \textbf{Performance} \\
@@ -210,6 +231,7 @@ To evaluate model sensitivity, controlled experiments were conducted by varying 
 \begin{table}[H]
 \centering
 \caption{Experiment B: Varying Context Window Size ($d=300, k=5$ fixed)}
+\small
 \begin{tabular}{c c c c}
 \toprule
 \textbf{Window Size} & \textbf{CBOW Loss} & \textbf{SG Loss} & \textbf{Performance} \\
@@ -224,6 +246,7 @@ To evaluate model sensitivity, controlled experiments were conducted by varying 
 \begin{table}[H]
 \centering
 \caption{Experiment C: Varying Negative Samples ($d=300, w=5$ fixed)}
+\small
 \begin{tabular}{c c c c}
 \toprule
 \textbf{Negative Samples} & \textbf{CBOW Loss} & \textbf{SG Loss} & \textbf{Performance} \\
@@ -242,11 +265,11 @@ To evaluate model sensitivity, controlled experiments were conducted by varying 
     \item More negative samples improved neighborhood quality, but with diminishing returns beyond $k=5$ to $k=10$.
 \end{itemize}
 
-Generated supervision sizes:
-\begin{itemize}[leftmargin=1.5em]
-    \item Skip-gram pairs: 5,828,080
-    \item CBOW pairs: 582,311
-\end{itemize}
+% Generated supervision sizes:
+% \begin{itemize}[leftmargin=1.5em]
+%     \item Skip-gram pairs: 5,828,080
+%     \item CBOW pairs: 582,311
+% \end{itemize}
 
 \subsubsection{Optimization Objective}
 Both models were trained with negative sampling, but with different prediction directions.
@@ -296,30 +319,16 @@ Cosine similarity was used for neighborhood search and vector arithmetic for ana
 
 \begin{table}[H]
 \centering
-\caption{CBOW Nearest Neighbors}
-\begin{tabular}{p{2.5cm} p{10cm}}
+\caption{Nearest Neighbors Comparison (Top-5)}
+\small
+\begin{tabular}{p{1.8cm} p{6.2cm} p{6.2cm}}
 \toprule
-\textbf{Query} & \textbf{Top Neighbors} \\
+\textbf{Query} & \textbf{CBOW} & \textbf{Skip-gram} \\
 \midrule
-research & researcher, award, collaboration, work, career \\
-student & program, various, career, team, member \\
-phd & mtech, mmt, msc, amd, jpd \\
-exam & cancel, asked, decide, clearing, spend \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Skip-gram Nearest Neighbors}
-\begin{tabular}{p{2.5cm} p{10cm}}
-\toprule
-\textbf{Query} & \textbf{Top Neighbors} \\
-\midrule
-research & hnology, florida, cuttingedge, undertaking, attracting \\
-student & udents, studen, stud, sophomore, tudents \\
-phd & mtech, jpd, mtechphd, reject, resubmit \\
-exam & anxiety, guardian, satisfactorily, cleared, converted \\
+research & researcher, award, collaboration, work, career & hnology, florida, cuttingedge, undertaking, attracting \\
+student & program, various, career, team, member & udents, studen, stud, sophomore, tudents \\
+phd & mtech, mmt, msc, amd, jpd & mtech, jpd, mtechphd, reject, resubmit \\
+exam & cancel, asked, decide, clearing, spend & anxiety, guardian, satisfactorily, cleared, converted \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -362,33 +371,41 @@ Department : Faculty :: Course : ? & term & failed \\
     \item Some pairs return weak or noisy tokens (e.g., \texttt{unplaced}, \texttt{premas}), reflecting residual scraping and tokenization artifacts in the source corpus.
     \item CBOW is typically more semantically consistent; Skip-gram is more sensitive to sparse or noisy forms.
     \item Results align with nearest-neighbor analysis, confirming model-specific strengths and limitations.
-\end{itemize}gram is more sensitive to sparse or noisy forms.
+\end{itemize}
 
 \subsection{Task 4: Visualization (t-SNE and PCA)}
 Embeddings around seeds \{research, btech, phd, exam, faculty, institute\} and their nearest neighbors were projected to 2D.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{report_assets/prob1_cell13_img1.png}
-    \caption{t-SNE projection for CBOW embeddings}
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{report_assets/prob1_cell13_img1.png}
+        \caption{t-SNE projection for CBOW embeddings}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{report_assets/prob1_cell13_img2.png}
+        \caption{t-SNE projection for Skip-gram embeddings}
+    \end{subfigure}
+    \caption{t-SNE comparison of CBOW and Skip-gram embeddings}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{report_assets/prob1_cell13_img2.png}
-    \caption{t-SNE projection for Skip-gram embeddings}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{report_assets/prob1_cell15_img1.png}
-    \caption{PCA projection for CBOW embeddings}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{report_assets/prob1_cell15_img2.png}
-    \caption{PCA projection for Skip-gram embeddings}
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{report_assets/prob1_cell15_img1.png}
+        \caption{PCA projection for CBOW embeddings}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{report_assets/prob1_cell15_img2.png}
+        \caption{PCA projection for Skip-gram embeddings}
+    \end{subfigure}
+    \caption{PCA comparison of CBOW and Skip-gram embeddings}
 \end{figure}
 
 \textbf{Clustering behavior:}
@@ -405,7 +422,6 @@ Embeddings around seeds \{research, btech, phd, exam, faculty, institute\} and t
 %     \item Visualizations: embedded in notebook and exported under \texttt{report\_assets/}
 % \end{itemize}
 
-\newpage
 \section{Problem 2: Character-Level Name Generation Using RNN Variants}
 
 \subsection{Objective}
@@ -417,6 +433,7 @@ A training set of 1000 Indian names was generated and stored in \texttt{Training
 \begin{table}[H]
 \centering
 \caption{Dataset Snapshot for Problem 2}
+\small
 \begin{tabular}{l c}
 \toprule
 \textbf{Property} & \textbf{Value} \\
@@ -434,7 +451,7 @@ Global training constants used:
 \begin{itemize}[leftmargin=1.5em]
     \item Embedding dimension = 48
     \item Hidden dimension = 128
-    \item Number of layers = 2 (except attention decoder path uses 1 recurrent layer)
+    \item Number of layers = 2 
     \item Learning rate = 0.002
     \item Epochs = 50
     \item Batch size = 64
@@ -495,6 +512,7 @@ Implementation details :
 \begin{table}[H]
 \centering
 \caption{Trainable Parameter Comparison}
+\small
 \begin{tabular}{l c}
 \toprule
 \textbf{Model} & \textbf{Trainable Parameters} \\
@@ -520,6 +538,7 @@ Each model was evaluated with 500 generated names.
 \begin{table}[H]
 \centering
 \caption{Quantitative Comparison (Problem 2)}
+\small
 \begin{tabular}{l c c}
 \toprule
 \textbf{Model} & \textbf{Novelty Rate} & \textbf{Diversity} \\
@@ -545,6 +564,7 @@ Representative generated samples from notebook outputs:
 \begin{table}[H]
 \centering
 \caption{Sample Generated Names}
+\small
 \begin{tabular}{p{3.1cm} p{10cm}}
 \toprule
 \textbf{Model} & \textbf{Examples} \\
@@ -577,6 +597,8 @@ RNN w/ Attention & Rushita, Sharanaji, Mona, Rathana, Drantadyi, Prajjslal, Bhar
 %     \item Evaluation scripts: implemented in notebook evaluation cell
 %     \item Saved model artifact: \texttt{vanilla\_rnn\_state\_dict.pt}
 % \end{itemize}
+
+\section{Limitations and Future Improvements}
 
 \subsection{Observed Limitations}
 \begin{itemize}[leftmargin=1.5em]
