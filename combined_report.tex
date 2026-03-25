@@ -459,7 +459,7 @@ Trainable parameters:
 \text{params}_{\text{RNN}} = 60,587
 \]
 
-Implementation details (from scratch in PyTorch):
+Implementation details :
 \begin{itemize}[leftmargin=1.5em]
     \item Built as a custom \texttt{nn.Module} with embedding layer, recurrent computation block, and output projection head for vocabulary logits.
     \item Sequence processing and next-token decoding are handled explicitly in the model forward pass for autoregressive character modeling.
@@ -475,7 +475,7 @@ Trainable parameters:
 \text{params}_{\text{BLSTM}} = 585,771
 \]
 
-Implementation details (from scratch in PyTorch):
+Implementation details :
 \begin{itemize}[leftmargin=1.5em]
     \item Built as a custom bidirectional LSTM module with explicit concatenation of forward and backward hidden representations before output projection.
     \item Bidirectional context integration is handled in the model pipeline to exploit both left and right character dependencies.
@@ -490,7 +490,7 @@ Trainable parameters:
 \text{params}_{\text{Attn}} = 155,307
 \]
 
-Implementation details (from scratch in PyTorch):
+Implementation details :
 \begin{itemize}[leftmargin=1.5em]
     \item Built with a custom encoder-decoder pipeline where additive attention scores, normalization, and context-vector computation are implemented explicitly in code.
     \item At each decoding step, the attention context is fused with decoder state before projecting to vocabulary logits for next-character prediction.
@@ -612,4 +612,3 @@ RNN w/ Attention & Rushita, Sharanaji, Mona, Rathana, Drantadyi, Prajjslal, Bhar
 This assignment successfully implements and compares word representation learning and character-level sequence modeling on institutional data. Problem 1 demonstrates that from-scratch Word2Vec (CBOW and Skip-gram) captures meaningful institutional semantics, with CBOW proving more stable (57--61\% analogy accuracy) than Skip-gram under noisy mixed-source corpora. Hyperparameter ablations confirm that optimal performance requires $d=300$, $w=5$, $k=5$. Problem 2 reveals critical architecture trade-offs: BLSTM achieves peak novelty (100\%) but suffers mode collapse; Vanilla RNN balances novelty (97.19\%) and diversity (99.40\%) but lacks orthographic plausibility; RNN with attention produces the most human-like names with 75.75\% novelty, demonstrating that attention mechanisms prevent degenerate solutions.
 
 \end{document}
-
