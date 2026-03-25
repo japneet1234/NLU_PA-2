@@ -29,3 +29,8 @@ Thumbs.db
 
 # iitj_pdfs and report_assets directories
 iitj_pdfs/
+
+# Include deliverable folder files even though global *.txt/*.pdf are ignored
+!B23CS1022-A2/
+!B23CS1022-A2/*.txt
+!B23CS1022-A2/*.pdf
