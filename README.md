@@ -9,6 +9,8 @@ The work is implemented primarily in notebooks:
 - `prob1.ipynb` for Word2Vec corpus creation, training, semantic analysis, and visualization
 - `prob2.ipynb` for character-level name generation models and evaluation
 
+**📄 [View the GitHub Project Page](index.html)** — A beautifully formatted landing page showcasing both problems, key metrics, and quick navigation.
+
 ---
 
 ## Repository Structure

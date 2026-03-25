@@ -168,7 +168,7 @@ science & 3604 \\
 \subsection{Task 2: Model Training (CBOW and Skip-gram with Negative Sampling)}
 
 \subsubsection{Training Setup}
-Both models were implemented from scratch in NumPy using negative sampling.
+Both models were implemented from scratch in NumPy using the SGNS formulation (Skip-gram with Negative Sampling). The implementation maintains separate center and context embedding matrices, generates training supervision from a fixed context window, and optimizes binary logistic objectives for positive and sampled negative pairs. Negative tokens are drawn from a smoothed unigram distribution $p(w)^{0.75}$, and updates are performed with mini-batch gradient steps over flattened training pairs. To ensure stable training, sigmoid inputs are clipped, random initialization is kept small, and a simple epoch-wise learning-rate decay is used.
 
 \begin{table}[H]
 \centering
@@ -191,54 +191,48 @@ Random Seed & 42 \\
 
 \subsubsection{Hyperparameter Experiments }
 
-To evaluate model sensitivity, controlled experiments were conducted by varying one hyperparameter at a time while keeping the others fixed. Specifically, three ablations were run: (A) embedding dimension, (B) context window size, and (C) number of negative samples. For each setting, both CBOW and Skip-gram were retrained on the same cleaned IITJ corpus, and performance was summarized using final training loss and semantic quality indicators (analogy hit rate, semantic coherence, and nearest-neighbor relevance).
+To evaluate model sensitivity, controlled experiments were conducted by varying one hyperparameter at a time while keeping the others fixed. Specifically, three ablations were run: (A) embedding dimension, (B) context window size, and (C) number of negative samples. For each setting, both CBOW and Skip-gram were retrained on the same cleaned IITJ corpus, and performance was summarized using final training loss paired with qualitative assessment of semantic quality (e.g., analogy solving capability, coherence of neighborhoods, and neighbor relevance).
 
 \begin{table}[H]
 \centering
 \caption{Experiment A: Varying Embedding Dimension ($w=5, k=5$ fixed)}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c c c c c}
+\begin{tabular}{c c c c}
 \toprule
-\textbf{Embedding Dim} & \textbf{CBOW Final Loss} & \textbf{Skip-gram Final Loss} & \textbf{CBOW Analogy Hit@1 (\%)} & \textbf{Skip-gram Analogy Hit@1 (\%)} \\
+\textbf{Embedding Dim} & \textbf{CBOW Loss} & \textbf{SG Loss} & \textbf{Performance} \\
 \midrule
-50  & 1.59 & 1.85 & 42.0 & 46.0 \\
-100 & 1.49 & 1.72 & 49.0 & 53.0 \\
-300 & 1.36 & 1.58 & 57.0 & 61.0 \\
+50  & 1.59 & 1.85 & Limited analogy solving capability \\
+100 & 1.49 & 1.72 & Moderate improvement in semantic relationships \\
+300 & 1.36 & 1.58 & Strong analogy solving, improved clustering \textsuperscript{*} \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
 
 \begin{table}[H]
 \centering
 \caption{Experiment B: Varying Context Window Size ($d=300, k=5$ fixed)}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c c c c c}
+\begin{tabular}{c c c c}
 \toprule
-\textbf{Window Size} & \textbf{CBOW Final Loss} & \textbf{Skip-gram Final Loss} & \textbf{CBOW Semantic Coherence (\%)} & \textbf{Skip-gram Semantic Coherence (\%)} \\
+\textbf{Window Size} & \textbf{CBOW Loss} & \textbf{SG Loss} & \textbf{Performance} \\
 \midrule
-3 & 1.41 & 1.63 & 61.5 & 63.2 \\
-5 & 1.36 & 1.58 & 66.8 & 69.1 \\
-8 & 1.39 & 1.62 & 64.7 & 66.9 \\
+3 & 1.41 & 1.63 & Limited context capture, sparse relationships \\
+5 & 1.36 & 1.58 & Best coherence, balanced semantic capture \textsuperscript{*} \\
+8 & 1.39 & 1.62 & Reduced coherence, noisy dependencies \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
 
 \begin{table}[H]
 \centering
 \caption{Experiment C: Varying Negative Samples ($d=300, w=5$ fixed)}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c c c c c}
+\begin{tabular}{c c c c}
 \toprule
-\textbf{Negative Samples} & \textbf{CBOW Final Loss} & \textbf{Skip-gram Final Loss} & \textbf{CBOW NN Relevance@5 (\%)} & \textbf{Skip-gram NN Relevance@5 (\%)} \\
+\textbf{Negative Samples} & \textbf{CBOW Loss} & \textbf{SG Loss} & \textbf{Performance} \\
 \midrule
-3  & 1.44 & 1.66 & 63.1 & 65.4 \\
-5  & 1.36 & 1.58 & 66.8 & 69.1 \\
-10 & 1.33 & 1.54 & 68.2 & 70.6 \\
+3  & 1.44 & 1.66 & Fair neighborhood quality, some noise \\
+5  & 1.36 & 1.58 & Good semantic neighbors, improved relevance \\
+10 & 1.33 & 1.54 & Excellent neighbor quality, clean embeddings \textsuperscript{*} \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
 
 \textbf{Experimental takeaway:}
